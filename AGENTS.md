@@ -11,11 +11,12 @@ Fastrim は JTrim 代替のデスクトップ画像トリマー。Python 3 + PyS
 
 リポジトリルート、venv 前提。
 
-- 依存インストール: `python -m venv .venv` のあと `.venv/bin/pip install -r requirements.txt`（Windows は `.venv\Scripts\pip`）
-- 起動: `python -m fastrim`（`run.sh` / `run.bat` でも可）
+- 依存インストール（Linux）: `python3 -m venv .venv` → `source .venv/bin/activate` → `pip install -r requirements.txt`
+- 依存インストール（Windows / Git Bash）: `python -m venv .venv_win` → `source .venv_win/Scripts/activate` → `pip install -r requirements.txt`
+- 起動: activate 済みなら `python -m fastrim`。または `./run.sh`
 - テスト全体: `pip install pytest` のあと `python -m pytest`
 - テスト単体: `python -m pytest tests/test_naming.py::test_next_seq_skips_existing`
-- exe 化（Windows）: `pip install pyinstaller` のあと `pyinstaller fastrim.spec` → `dist/Fastrim.exe`
+- exe 化（Windows / Git Bash のみ）: `source .venv_win/Scripts/activate` → `pip install pyinstaller` → `pyinstaller fastrim.spec` → `dist/Fastrim.exe`
 
 Lint / 整形 / CI の設定はない。作らない。
 
@@ -46,5 +47,7 @@ Lint / 整形 / CI の設定はない。作らない。
 - 設定は `%APPDATA%/Fastrim/settings.json`（Windows）または `~/.config/fastrim/settings.json`。ユーザー設定を汚さない。退避先は環境変数 `FASTRIM_CONFIG_DIR`。`tests/conftest.py` がテスト中に一時ディレクトリへ向ける
 - 同 conftest が `QT_QPA_PLATFORM=offscreen` をセットする。ヘッドレスで `MainWindow` を直に使うなら同じ変数が要る
 - `pytest` は `requirements.txt` に入っていない
-- `dist/` `build/` `.venv/` は生成物。コミットしない
+- venv は OS 専用。Linux は `.venv`、Windows は `.venv_win`。混ぜない
+- Windows の作業・ビルドは Git Bash 前提（cmd / PowerShell ではない）。activate は `source .venv_win/Scripts/activate`
+- `dist/` `build/` `.venv/` `.venv_win/` は生成物。コミットしない
 - エージェント向け指示は `AGENTS.md` のみ。`CLAUDE.md` / `.cursorrules` / `.github/copilot-instructions.md` などは作らない
