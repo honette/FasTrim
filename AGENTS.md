@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-Fastrim は JTrim 代替のデスクトップ画像トリマー。Python 3 + PySide6 + Pillow。
+FasTrim は JTrim 代替のデスクトップ画像トリマー。Python 3 + PySide6 + Pillow。
 配布先は Windows 11 の `.exe`（`fastrim.spec`）。製品仕様の正は `IDEA.txt`。UI 文言は英語。
 
 ## よく使うコマンド
@@ -16,7 +16,7 @@ Fastrim は JTrim 代替のデスクトップ画像トリマー。Python 3 + PyS
 - 起動: activate 済みなら `python -m fastrim`。または `./run.sh`
 - テスト全体: `pip install pytest` のあと `python -m pytest`
 - テスト単体: `python -m pytest tests/test_naming.py::test_next_seq_skips_existing`
-- exe 化（Windows / Git Bash のみ）: `source .venv_win/Scripts/activate` → `pip install pyinstaller` → `pyinstaller fastrim.spec` → `dist/Fastrim.exe`
+- exe 化（Windows / Git Bash のみ）: `source .venv_win/Scripts/activate` → `pip install pyinstaller` → `pyinstaller fastrim.spec` → `dist/FasTrim.exe`
 
 Lint / 整形 / CI の設定はない。作らない。
 
@@ -44,7 +44,7 @@ Lint / 整形 / CI の設定はない。作らない。
 
 ## 注意
 
-- 設定は `%APPDATA%/Fastrim/settings.json`（Windows）または `~/.config/fastrim/settings.json`。ユーザー設定を汚さない。退避先は環境変数 `FASTRIM_CONFIG_DIR`。`tests/conftest.py` がテスト中に一時ディレクトリへ向ける
+- 設定は `%APPDATA%/FasTrim/settings.json`（Windows）または `~/.config/fastrim/settings.json`。ユーザー設定を汚さない。退避先は環境変数 `FASTRIM_CONFIG_DIR`。`tests/conftest.py` がテスト中に一時ディレクトリへ向ける
 - 同 conftest が `QT_QPA_PLATFORM=offscreen` をセットする。ヘッドレスで `MainWindow` を直に使うなら同じ変数が要る
 - `pytest` は `requirements.txt` に入っていない
 - venv は OS 専用。Linux は `.venv`、Windows は `.venv_win`。混ぜない

@@ -48,6 +48,7 @@ from fastrim.imageops import (
     render_working,
     save_image,
 )
+from fastrim.dnd import first_dropped_image
 from fastrim.naming import next_dest_path
 from fastrim.theme import apply_theme, make_app_icon
 
@@ -136,6 +137,7 @@ class MainWindow(QMainWindow):
 
     def _build_ui(self) -> None:
         root = QWidget()
+        root.setAcceptDrops(True)
         root_layout = QVBoxLayout(root)
         root_layout.setContentsMargins(0, 0, 0, 0)
         root_layout.setSpacing(0)
@@ -148,6 +150,7 @@ class MainWindow(QMainWindow):
         self.canvas.cropSaveRequested.connect(self.save_crop)
         self.canvas.zoomChanged.connect(self._on_zoom_changed)
         self.canvas.openRequested.connect(self.open_dialog)
+        self.canvas.filesDropped.connect(self.open_path)
         self.splitter.addWidget(self.canvas)
         self.splitter.addWidget(self._build_sidebar())
         self.splitter.setStretchFactor(0, 1)
@@ -541,15 +544,24 @@ class MainWindow(QMainWindow):
         self.zoom_label.setText(f"Zoom: {self.canvas.zoom_value() * 100:.0f}%")
 
     def dragEnterEvent(self, event) -> None:  # noqa: ANN001
-        if event.mimeData().hasUrls():
+        if first_dropped_image(event.mimeData()) is not None:
             event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event) -> None:  # noqa: ANN001
+        if first_dropped_image(event.mimeData()) is not None:
+            event.acceptProposedAction()
+        else:
+            event.ignore()
 
     def dropEvent(self, event) -> None:  # noqa: ANN001
-        for url in event.mimeData().urls():
-            path = Path(url.toLocalFile())
-            if is_image_file(path):
-                self.open_path(path)
-                break
+        path = first_dropped_image(event.mimeData())
+        if path is None:
+            event.ignore()
+            return
+        self.open_path(path)
+        event.acceptProposedAction()
 
     def closeEvent(self, event) -> None:  # noqa: ANN001
         geo = self.geometry()

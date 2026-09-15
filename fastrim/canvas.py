@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PySide6.QtCore import QPoint, QPointF, QRectF, QSize, Qt, Signal
+from PySide6.QtCore import QEvent, QPoint, QPointF, QRectF, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QPainter, QPen, QPixmap, QWheelEvent
 from PySide6.QtWidgets import (
     QFrame,
@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 
+from fastrim.dnd import first_dropped_image
 from fastrim.geom import box_size, parse_aspect, selection_from_drag
 
 
@@ -63,6 +64,7 @@ class ImageCanvas(QGraphicsView):
     cropSaveRequested = Signal()
     zoomChanged = Signal(str, float)
     openRequested = Signal()
+    filesDropped = Signal(object)
 
     def __init__(self, parent=None) -> None:  # noqa: ANN001
         super().__init__(parent)
@@ -78,6 +80,9 @@ class ImageCanvas(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
+        self.setAcceptDrops(True)
+        self.viewport().setAcceptDrops(True)
+        self.viewport().installEventFilter(self)
 
         self._pix_item: QGraphicsPixmapItem | None = None
         self._grid = GridItem()
@@ -311,6 +316,40 @@ class ImageCanvas(QGraphicsView):
         new_zoom = min(16.0, max(0.05, self._zoom * factor))
         self._zoom_at(new_zoom, event.position().toPoint())
         event.accept()
+
+    def eventFilter(self, watched, event) -> bool:  # noqa: ANN001
+        if watched is self.viewport():
+            etype = event.type()
+            if etype == QEvent.Type.DragEnter:
+                self.dragEnterEvent(event)
+                return True
+            if etype == QEvent.Type.DragMove:
+                self.dragMoveEvent(event)
+                return True
+            if etype == QEvent.Type.Drop:
+                self.dropEvent(event)
+                return True
+        return super().eventFilter(watched, event)
+
+    def dragEnterEvent(self, event) -> None:  # noqa: ANN001
+        if first_dropped_image(event.mimeData()) is not None:
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event) -> None:  # noqa: ANN001
+        if first_dropped_image(event.mimeData()) is not None:
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event) -> None:  # noqa: ANN001
+        path = first_dropped_image(event.mimeData())
+        if path is None:
+            event.ignore()
+            return
+        self.filesDropped.emit(path)
+        event.acceptProposedAction()
 
     def _in_image(self, scene_pos: QPointF) -> bool:
         return 0 <= scene_pos.x() < self._img_w and 0 <= scene_pos.y() < self._img_h

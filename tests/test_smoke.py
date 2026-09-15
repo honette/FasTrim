@@ -42,6 +42,29 @@ def test_load_crop_save_roundtrip(qapp: QApplication, tmp_path: Path) -> None:
     window.close()
 
 
+def test_drop_mime_and_title(qapp: QApplication, tmp_path: Path) -> None:
+    from PySide6.QtCore import QMimeData, QUrl
+
+    from fastrim.constants import APP_NAME
+    from fastrim.dnd import first_dropped_image
+
+    source = tmp_path / "dropme.png"
+    Image.new("RGB", (32, 32), (1, 2, 3)).save(source)
+    mime = QMimeData()
+    mime.setUrls([QUrl.fromLocalFile(str(source))])
+    assert first_dropped_image(mime) == source
+
+    settings = Settings()
+    window = MainWindow(settings)
+    assert window.windowTitle() == APP_NAME
+    assert APP_NAME == "FasTrim"
+    window.open_path(source)
+    window.canvas.filesDropped.emit(source)
+    qapp.processEvents()
+    assert window.path == source.resolve()
+    window.close()
+
+
 def test_dialogs_construct(qapp: QApplication) -> None:
     from fastrim.config import Settings
     from fastrim.dialogs import NamingDialog, SettingsDialog, ShortcutsDialog

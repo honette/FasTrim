@@ -59,6 +59,23 @@ def test_effective_ext() -> None:
     assert effective_ext(Path("a.png"), "jpeg") == ".jpg"
 
 
+def test_first_openable_path(tmp_path: Path) -> None:
+    from fastrim.imageops import first_openable_path
+
+    image = tmp_path / "shot.jpg"
+    image.write_bytes(b"x")
+    other = tmp_path / "notes.txt"
+    other.write_bytes(b"x")
+    nested = tmp_path / "album"
+    nested.mkdir()
+    (nested / "a.png").write_bytes(b"x")
+    assert first_openable_path([other, image]) == image
+    assert first_openable_path([other]) is None
+    found = first_openable_path([nested])
+    assert found is not None
+    assert found.name == "a.png"
+
+
 def test_list_images_natural_sort(tmp_path: Path) -> None:
     for name in ("img10.jpg", "img2.jpg", "img1.jpg", "notes.txt"):
         (tmp_path / name).write_bytes(b"not-an-image")

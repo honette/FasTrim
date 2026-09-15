@@ -1,4 +1,4 @@
-# Fastrim
+# FasTrim
 
 画像を開いて範囲を切り、ファイル名を聞かずに別名保存するトリミングアプリです。Windows 11 向けです。
 
@@ -45,4 +45,4 @@ python -m venv .venv_win
 .venv_win/Scripts/pyinstaller fastrim.spec
 ```
 
-`dist/Fastrim.exe` ができます。
+`dist/FasTrim.exe` ができます。

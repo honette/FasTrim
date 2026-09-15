@@ -29,6 +29,18 @@ def is_image_file(path: Path) -> bool:
     return path.is_file() and path.suffix.lower() in IMAGE_EXTS
 
 
+def first_openable_path(paths: list[Path]) -> Path | None:
+    for path in paths:
+        path = Path(path)
+        if is_image_file(path):
+            return path
+        if path.is_dir():
+            images = list_images(path)
+            if images:
+                return images[0]
+    return None
+
+
 def list_images(folder: Path) -> list[Path]:
     try:
         files = [p.resolve() for p in folder.iterdir() if is_image_file(p)]

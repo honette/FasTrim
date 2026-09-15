@@ -1,5 +1,5 @@
-APP_NAME = "Fastrim"
-ORG_NAME = "Fastrim"
+APP_NAME = "FasTrim"
+ORG_NAME = "FasTrim"
 
 IMAGE_EXTS = {
     ".jpg",
