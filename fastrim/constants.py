@@ -22,14 +22,14 @@ IMAGE_EXTS = {
 }
 
 OPEN_FILTER = (
-    "画像 ("
+    "Images ("
     "*.jpg *.jpeg *.jfif *.png *.gif *.bmp *.webp *.tif *.tiff "
     "*.ico *.tga *.heic *.heif"
-    ");;すべてのファイル (*.*)"
+    ");;All files (*.*)"
 )
 
 ZOOM_CHOICES = [
-    ("適合", "fit"),
+    ("Fit", "fit"),
     ("25%", "25"),
     ("50%", "50"),
     ("75%", "75"),

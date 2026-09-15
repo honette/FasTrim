@@ -13,16 +13,11 @@ def apply_theme(app: QApplication) -> None:
         pass
     families = set(QFontDatabase.families())
     for name in (
-        "Yu Gothic UI",
-        "Yu Gothic",
-        "Meiryo UI",
-        "Meiryo",
         "Segoe UI",
-        "Noto Sans CJK JP",
-        "Noto Sans CJK",
-        "Noto Sans JP",
-        "IPAPGothic",
-        "TakaoPGothic",
+        "Yu Gothic UI",
+        "Meiryo UI",
+        "Noto Sans",
+        "DejaVu Sans",
     ):
         if name in families:
             font = QFont(name, 10)

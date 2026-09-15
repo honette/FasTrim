@@ -5,7 +5,7 @@
 ## プロジェクト概要
 
 Fastrim は JTrim 代替のデスクトップ画像トリマー。Python 3 + PySide6 + Pillow。
-配布先は Windows 11 の `.exe`（`fastrim.spec`）。製品仕様の正は `IDEA.txt`。UI 文言は日本語。
+配布先は Windows 11 の `.exe`（`fastrim.spec`）。製品仕様の正は `IDEA.txt`。UI 文言は英語。
 
 ## よく使うコマンド
 
@@ -39,7 +39,7 @@ Lint / 整形 / CI の設定はない。作らない。
 - 保存は常に別名。衝突したら連番を進める
 - `pil_to_qpixmap` は `QImage.copy()` が必要（PIL バッファは一時的）
 - HEIC は `pillow-heif` があれば有効。必須依存に足さない
-- 仕様を足す・変えるときは `IDEA.txt` と矛盾させない。UI は日本語のまま
+- 仕様を足す・変えるときは `IDEA.txt` と矛盾させない。UI 文言は英語のまま（CJK フォントが無い環境でも読めるようにする）
 
 ## 注意
 

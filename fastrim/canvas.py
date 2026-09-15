@@ -106,12 +106,12 @@ class ImageCanvas(QGraphicsView):
         self._panning = False
         self._pan_start = QPoint()
 
-        self._empty = QLabel("画像を開く（Ctrl+O）またはドロップ", self.viewport())
+        self._empty = QLabel("Open an image (Ctrl+O) or drop one here", self.viewport())
         self._empty.setAlignment(Qt.AlignCenter)
         self._empty.setStyleSheet("color: #8a8a8a; font-size: 16px; background: transparent;")
         self._empty.setAttribute(Qt.WA_TransparentForMouseEvents)
 
-        self.save_btn = QPushButton("保存", self.viewport())
+        self.save_btn = QPushButton("Save", self.viewport())
         self.save_btn.setObjectName("cropSaveBtn")
         self.save_btn.setCursor(Qt.PointingHandCursor)
         self.save_btn.setStyleSheet(
