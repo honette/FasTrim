@@ -1,1 +1,3 @@
-read: AGENTS.md
+# AGENTS.md は編集対象として扱う（read: にすると読み取り専用になる）
+files:
+  - AGENTS.md
