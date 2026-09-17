@@ -41,6 +41,7 @@ Lint / 整形 / CI の設定はない。作らない。
 - `pil_to_qpixmap` は `QImage.copy()` が必要（PIL バッファは一時的）
 - HEIC は `pillow-heif` があれば有効。必須依存に足さない
 - 仕様を足す・変えるときは `IDEA.txt` と矛盾させない。UI 文言は英語のまま（CJK フォントが無い環境でも読めるようにする）
+- アイコンは `assets/FasTrim.ico`（+ `assets/icon.png`）。タスクバーと exe は ico、実行時は `theme.asset_path` が PyInstaller の `_MEIPASS` も見る。デザイン変更時は `fastrim.theme.make_app_icon` の描画と揃える
 
 ## 注意
 
@@ -49,5 +50,5 @@ Lint / 整形 / CI の設定はない。作らない。
 - `pytest` は `requirements.txt` に入っていない
 - venv は OS 専用。Linux は `.venv`、Windows は `.venv_win`。混ぜない
 - Windows の作業・ビルドは Git Bash 前提（cmd / PowerShell ではない）。activate は `source .venv_win/Scripts/activate`
-- `dist/` `build/` `.venv/` `.venv_win/` は生成物。コミットしない
+- `dist/` `build/` `.venv/` `.venv_win/` は生成物。コミットしない。`assets/` はコミットする
 - エージェント向け指示は `AGENTS.md` のみ。`CLAUDE.md` / `.cursorrules` / `.github/copilot-instructions.md` などは作らない

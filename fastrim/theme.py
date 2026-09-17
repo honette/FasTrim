@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QFontDatabase, QIcon, QPainter, QPalette, QPen, QPixmap
 from PySide6.QtWidgets import QApplication
@@ -111,7 +114,21 @@ def apply_theme(app: QApplication) -> None:
     )
 
 
+def asset_path(name: str) -> Path:
+    base = Path(getattr(sys, "_MEIPASS", "")) if getattr(sys, "frozen", False) else None
+    if base is not None:
+        candidate = base / "assets" / name
+        if candidate.exists():
+            return candidate
+    return Path(__file__).resolve().parent.parent / "assets" / name
+
+
 def make_app_icon() -> QIcon:
+    ico = asset_path("FasTrim.ico")
+    if ico.exists():
+        icon = QIcon(str(ico))
+        if not icon.isNull():
+            return icon
     pixmap = QPixmap(256, 256)
     pixmap.fill(Qt.transparent)
     painter = QPainter(pixmap)
